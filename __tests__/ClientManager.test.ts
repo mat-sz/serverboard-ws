@@ -1,5 +1,4 @@
 import { v4 as uuid } from 'uuid';
-import randomColor from 'randomcolor';
 
 import { ClientManager } from '../src/ClientManager';
 import { Client } from '../src/types/Client';
@@ -7,27 +6,12 @@ import { MessageType } from '../src/types/MessageType';
 
 export class TestClient implements Client {
   readonly clientId = uuid();
-  readonly clientColor = randomColor({ luminosity: 'light' });
   readonly firstSeen = new Date();
   lastSeen = new Date();
   remoteAddress: string;
-  networkName: string;
   lastMessage: string;
   closed = false;
   readyState = 1;
-
-  setNetworkName(networkName: string, networkMessage: (name: string) => void) {
-    const previousName = this.networkName;
-    this.networkName = networkName;
-
-    if (previousName) {
-      networkMessage(previousName);
-    }
-
-    if (networkName) {
-      networkMessage(networkName);
-    }
-  }
 
   send(data: string) {
     this.lastMessage = data;
