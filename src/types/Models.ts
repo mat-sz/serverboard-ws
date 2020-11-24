@@ -18,3 +18,8 @@ export interface PingMessageModel extends MessageModel {
   type: MessageType.PING;
   timestamp: number;
 }
+
+export interface DataMessageModel extends MessageModel {
+  type: MessageType.DATA;
+  data: any;
+}
