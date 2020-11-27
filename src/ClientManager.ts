@@ -1,6 +1,7 @@
 import { Client } from './types/Client';
 import { MessageModel } from './types/Models';
 import { MessageType } from './types/MessageType';
+import { getFullSystemInfo } from './systemInfo';
 
 export class ClientManager {
   private clients: Client[] = [];
@@ -12,6 +13,13 @@ export class ClientManager {
       JSON.stringify({
         type: MessageType.WELCOME,
         clientId: client.clientId,
+      })
+    );
+
+    client.send(
+      JSON.stringify({
+        type: MessageType.DATA,
+        data: getFullSystemInfo(),
       })
     );
   }
