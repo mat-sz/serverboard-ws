@@ -9,12 +9,12 @@ export class TestClient implements Client {
   readonly firstSeen = new Date();
   lastSeen = new Date();
   remoteAddress: string;
-  lastMessage: string;
+  receivedMessages: any[] = [];
   closed = false;
   readyState = 1;
 
   send(data: string) {
-    this.lastMessage = data;
+    this.receivedMessages.push(JSON.parse(data));
   }
 
   close() {
@@ -29,7 +29,7 @@ describe('ClientManager', () => {
     const client = new TestClient();
     clientManager.addClient(client);
 
-    expect(JSON.parse(client.lastMessage)).toMatchObject({
+    expect(client.receivedMessages).toContainEqual({
       type: MessageType.WELCOME,
       clientId: client.clientId,
     });
@@ -49,16 +49,22 @@ describe('ClientManager', () => {
 
     clientManager.pingClients();
 
-    expect(JSON.parse(client1.lastMessage)).toMatchObject({
-      type: MessageType.PING,
-    });
+    expect(client1.receivedMessages).toContainEqual(
+      expect.objectContaining({
+        type: MessageType.PING,
+      })
+    );
 
-    expect(JSON.parse(client2.lastMessage)).toMatchObject({
-      type: MessageType.PING,
-    });
+    expect(client2.receivedMessages).toContainEqual(
+      expect.objectContaining({
+        type: MessageType.PING,
+      })
+    );
 
-    expect(JSON.parse(client3.lastMessage)).toMatchObject({
-      type: MessageType.PING,
-    });
+    expect(client3.receivedMessages).toContainEqual(
+      expect.objectContaining({
+        type: MessageType.PING,
+      })
+    );
   });
 });
