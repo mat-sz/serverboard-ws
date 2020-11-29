@@ -1,5 +1,7 @@
 export async function getFullSystemInfo(): Promise<any> {
-  return {};
+  return {
+    ...getUpdatedSystemInfo(),
+  };
 }
 
 export async function getUpdatedSystemInfo(): Promise<any> {
